@@ -1,1 +1,1 @@
-This is internal marks prokect
+This is internal marks project
