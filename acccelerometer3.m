@@ -1,4 +1,4 @@
-lc; clear; close all;
+clear; close all;
 
 % SETUP SERIAL COMMUNICATION
 serialPort = "COM5";  % Change to your Arduino's COM port
