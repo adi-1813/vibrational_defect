@@ -1,12 +1,12 @@
 clc; clear; close all;
 
-% SETUP SERIAL COMMUNICATION
+% Seting up SErial communications
 serialPort = "COM5";  % Arduino's COM port
 baudRate = 115200;
 s = serialport(serialPort, baudRate);
-flush(s);  % Clear buffer
+flush(s);  % Clearing the buffer data
 
-% SAMPLING SETTINGS
+% sampling settings
 Fs = 1000;  % Sampling Frequency (Hz)
 numPoints = 500;  % Data window size for real-time plotting
 data = zeros(numPoints, 6);  % [ax1, ay1, az1, ax2, ay2, az2]
@@ -15,7 +15,7 @@ freq = (0:numPoints/2-1) * (Fs / numPoints);
 fftAx1 = zeros(numPoints/2,1);
 fftAx2 = zeros(numPoints/2,1);
 
-% REAL-TIME PLOTS
+% real time plots
 figure;
 
 % MPU-1 Plot
@@ -58,10 +58,10 @@ xlabel('Frequency (Hz)'); ylabel('Magnitude');
 annot2 = text(0, 0, '', 'FontSize', 10, 'Color', 'r');
 grid on;
 
-% CALIBRATION
-numSamples = 100;
+% calibration part
+numSamples = 1000;
 calibrationData = zeros(numSamples, 6);
-disp("Calibrating... Keep the MPU-6500 still!");
+disp("Calibrating... Keep the MPU-9250 still!");
 flush(s);
 pause(2);
 
@@ -77,7 +77,7 @@ offsets = mean(calibrationData, 1, 'omitnan');
 disp("Calibration complete! Offsets: ");
 disp(offsets);
 
-%-----REAL TIME UPDATE LOOP--------
+%real time update loop
 updateInterval = 5;
 counter = 0;
 
@@ -97,7 +97,7 @@ while true
         counter = counter + 1;
 
         if mod(counter, updateInterval) == 0
-            % ==== Enhanced FFT ====
+            % Enhanced FFT
             % Demean
             signal1 = data(:,1) - mean(data(:,1));
             signal2 = data(:,4) - mean(data(:,4));
@@ -125,7 +125,7 @@ while true
             [maxMag2, idx2] = max(fftAx2);
             maxFreq2 = freq(idx2);
 
-            % === Plot updates ===
+            %Plot updates
             set(h1, 'YData', data(:,1));
             set(h2, 'YData', data(:,2));
             set(h3, 'YData', data(:,3));
